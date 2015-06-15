@@ -1,0 +1,2271 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass beamer
+\begin_preamble
+\usetheme{Antibes}
+\usecolortheme{beaver}
+\usefonttheme{default}
+\useinnertheme{circles}
+
+\setbeamercovered{transparent}
+\setbeamersize{text margin left=0.5cm}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+\setbeamersize{text margin left=0.4cm}
+\setbeamersize{text margin right=0.4cm}
+
+\usepackage{lmodern}
+\usepackage[protrusion=true,expansion=true]{microtype}
+
+\usepackage{color}
+\usepackage{listings}
+\usepackage{setspace}
+
+\definecolor{Code}{rgb}{0,0,0}
+\definecolor{Decorators}{rgb}{0.5,0.5,0.5}
+\definecolor{Numbers}{rgb}{0.5,0,0}
+\definecolor{MatchingBrackets}{rgb}{0.25,0.5,0.5}
+\definecolor{Keywords}{rgb}{0,0,1}
+\definecolor{self}{rgb}{0,0,0}
+\definecolor{Strings}{rgb}{0,0.63,0}
+\definecolor{Comments}{rgb}{0,0.63,1}
+\definecolor{Backquotes}{rgb}{0,0,0}
+\definecolor{Classname}{rgb}{0,0,0}
+\definecolor{FunctionName}{rgb}{0,0,0}
+\definecolor{Operators}{rgb}{0,0,0}
+\definecolor{Background}{rgb}{0.98,0.98,0.98}
+
+\usepackage{listings}
+\lstset{
+numbers=left,
+numberstyle=\scriptsize,
+numbersep=1em,
+xleftmargin=1em,
+framextopmargin=2em,
+framexbottommargin=2em,
+showspaces=false,
+showtabs=false,
+showstringspaces=false,
+frame=l,
+tabsize=4,
+% Basic
+basicstyle=\ttfamily\footnotesize\setstretch{1},
+backgroundcolor=\color{Background},
+language=Python,
+% Comments
+commentstyle=\color{Comments}\slshape,
+% Strings
+stringstyle=\color{Strings},
+morecomment=[s][\color{Strings}]{"""}{"""},
+morecomment=[s][\color{Strings}]{'''}{'''},
+% keywords
+morekeywords={import,from,class,def,for,while,if,is,in,elif,else,not,and,or,print,break,continue,return,True,False,None,access,as,,del,except,exec,finally,global,import,lambda,pass,print,raise,try,assert,with},
+keywordstyle={\color{Keywords}\bfseries},
+% additional keywords
+morekeywords={[2]@invariant},
+keywordstyle={[2]\color{Decorators}\slshape},
+emph={self},
+emphstyle={\color{self}\slshape},
+%
+}
+
+\setbeamertemplate{footline}[text line]{%
+  \parbox{\linewidth}{\vspace*{-8pt}\href{http://www.czielinski.de/}{\insertshortauthor}\hfill\insertpagenumber}}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Concurrent Computations
+\begin_inset Newline newline
+\end_inset
+
+on Multicore Processors
+\end_layout
+
+\begin_layout Subtitle
+Threads & Subprocesses
+\end_layout
+
+\begin_layout Author
+Christian Zielinski
+\end_layout
+
+\begin_layout Institute
+18
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+th
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+June 2015 -- PyCon SG 2015
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Subsection
+Introduction
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Who am I?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Currently a Ph.D.
+\begin_inset space ~
+\end_inset
+
+student at Nanyang Technological University
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Working in computational physics, i.e.
+\begin_inset space ~
+\end_inset
+
+simulation of elementary particles with Monte Carlo methods (
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset CommandInset href
+LatexCommand href
+name "lattice quantum chromodynamics"
+target "http://en.wikipedia.org/wiki/Lattice_QCD"
+
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+First experiments with Python around ten years ago
+\end_layout
+
+\begin_layout Itemize
+Heavy user of Python, 
+\family typewriter
+\series bold
+numpy
+\family default
+\series default
+ and 
+\family typewriter
+\series bold
+scipy
+\family default
+\series default
+ for data analysis and evaluation of numerical algorithms
+\end_layout
+
+\begin_layout Itemize
+Slides available on:
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size normal
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+www.github.com/czielinski/pyconsg2015
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Subsection
+Concurrency
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Why concurrency?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Python is 
+\shape italic
+awesome
+\shape default
+, but slow
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+C/C++ is typically 10--100 times faster
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Single CPU core performance only improves slowly over time
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+But modern processors have increasing number of cores
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Blocking operations like I/O cause idle time
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Rather do computations in the meantime
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Concurrency helps to mitigate all problems
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Potentially significant speed ups
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Concurrency in Python
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+How to make us of concurrency in Python?
+\end_layout
+
+\begin_layout Itemize
+For stock Python typically use either
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Threads via the 
+\family typewriter
+\series bold
+threading
+\family default
+\series default
+ module
+\end_layout
+
+\begin_layout Itemize
+Subprocesses via the 
+\family typewriter
+\series bold
+multiprocessing
+\family default
+\series default
+ module
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+They provide convenient high-level interfaces
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\family typewriter
+\series bold
+threading
+\family default
+\series default
+ and 
+\family typewriter
+\series bold
+multiprocessing
+\family default
+\series default
+ have similar API
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+There are great third-party modules to go beyond a single CPU:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\family typewriter
+\series bold
+mpi4py
+\family default
+\series default
+, 
+\family typewriter
+\series bold
+pycuda
+\family default
+\series default
+, 
+\family typewriter
+\series bold
+pyopencl
+\family default
+\series default
+ (but not today's topic)
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Global Interpreter Lock (GIL)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+CPython's threads are real POSIX / Windows threads
+\end_layout
+
+\begin_layout Itemize
+The Global Interpreter Lock (GIL) prevents that more than one thread is
+ executing Python bytecode at the same time
+\end_layout
+
+\begin_layout Itemize
+The Global Interpreter Lock:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+makes the CPython interpreter explicitly thread-safe
+\end_layout
+
+\begin_layout Itemize
+simplifies CPython's code base
+\end_layout
+
+\begin_layout Itemize
+prevents true parallel threading
+\end_layout
+
+\begin_layout Itemize
+is released during I/O
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+The GIL is implementation dependent
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+CPython and PyPy have a GIL
+\end_layout
+
+\begin_layout Itemize
+Jython and IronPython have no GIL
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Section
+Overview
+\end_layout
+
+\begin_layout Subsection
+Threads
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Threads
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Threads are accessible via 
+\family typewriter
+\series bold
+threading
+\family default
+\series default
+ module
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Can be spawned quickly
+\end_layout
+
+\begin_layout Itemize
+Share memory
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Threads can be useful for I/O bound problems
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Do useful operations during blocking operations
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Usually not suited for CPU bound problems
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+GIL prevents true parallel computations
+\begin_inset Newline newline
+\end_inset
+
+(with a few exceptions, e.g.
+\begin_inset space ~
+\end_inset
+
+some 
+\family typewriter
+\series bold
+numpy
+\family default
+\series default
+ functions)
+\end_layout
+
+\begin_layout Itemize
+Introduce additional overhead
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Use 
+\family typewriter
+\series bold
+Lock
+\family default
+\series default
+ to define critical sections,
+\begin_inset Newline newline
+\end_inset
+
+i.e.
+\begin_inset space ~
+\end_inset
+
+code that requires mutual exclusion of access
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout FragileFrame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Simple threading example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FragileFrame
+
+\end_layout
+
+\begin_layout FragileFrame
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import threading as th
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def worker(lock, num):
+\end_layout
+
+\begin_layout Plain Layout
+
+  cubed = num**3
+\end_layout
+
+\begin_layout Plain Layout
+
+  # A worker should actually avoid I/O ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  lock.acquire()
+\end_layout
+
+\begin_layout Plain Layout
+
+  print("{} cubed is {}".format(num, cubed))
+\end_layout
+
+\begin_layout Plain Layout
+
+  lock.release()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+my_threads = []
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(4):
+\end_layout
+
+\begin_layout Plain Layout
+
+  lock = th.Lock()
+\end_layout
+
+\begin_layout Plain Layout
+
+  t = th.Thread(target=worker, args=(lock, i))
+\end_layout
+
+\begin_layout Plain Layout
+
+  my_threads.append(t)
+\end_layout
+
+\begin_layout Plain Layout
+
+  t.start()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Subsection
+Subprocesses
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Subprocesses (I)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Subprocesses accessible via 
+\family typewriter
+\series bold
+multiprocessing
+\family default
+\series default
+ module
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Self-sufficient interpreter instance
+\end_layout
+
+\begin_layout Itemize
+No memory sharing
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Subprocesses have their own interpreter instance
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Spawning takes long time, significant overhead
+\end_layout
+
+\begin_layout Itemize
+Every subprocess has own GIL, allow for true parallelism
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Subprocesses (II)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Subprocesses suited for CPU bound problems
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Can do computations truly in parallel to utilize several cores
+\end_layout
+
+\begin_layout Itemize
+Usually not useful to spawn more than one subprocess per 
+\shape italic
+physical
+\shape default
+ core
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Not suited for I/O bound problems
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Cannot e.g.
+\begin_inset space ~
+\end_inset
+
+read files faster from HDD
+\end_layout
+
+\begin_layout Itemize
+To keep cores busy need to feed data quickly enough
+\end_layout
+
+\begin_layout Itemize
+Potential memory bandwidth bottleneck for large number of cores
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout FragileFrame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Simple multiprocessing example
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout FragileFrame
+
+\end_layout
+
+\begin_layout FragileFrame
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import multiprocessing as mp
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def worker(lock, num):
+\end_layout
+
+\begin_layout Plain Layout
+
+  cubed = num**3
+\end_layout
+
+\begin_layout Plain Layout
+
+  # A worker should actually avoid I/O ...
+\end_layout
+
+\begin_layout Plain Layout
+
+  lock.acquire()
+\end_layout
+
+\begin_layout Plain Layout
+
+  print("{} cubed is {}".format(num, cubed))
+\end_layout
+
+\begin_layout Plain Layout
+
+  lock.release()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+my_procs = []
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(4):
+\end_layout
+
+\begin_layout Plain Layout
+
+  lock = mp.Lock()
+\end_layout
+
+\begin_layout Plain Layout
+
+  p = mp.Process(target=worker, args=(lock, i))
+\end_layout
+
+\begin_layout Plain Layout
+
+  my_procs.append(p)
+\end_layout
+
+\begin_layout Plain Layout
+
+  p.start()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Subsection
+Theory
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Scaling and Amdahl's law
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Using 
+\begin_inset Formula $N$
+\end_inset
+
+ cores does not automatically reduce runtime by a factor of 
+\begin_inset Formula $N$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Some code section inherently serial, like I/O
+\end_layout
+
+\begin_layout Itemize
+Some algorithms are difficult to parallelize, e.g.
+\begin_inset space ~
+\end_inset
+
+recursive functions
+\end_layout
+
+\begin_layout Itemize
+One usually parallelizes only the performance-critical parts of the code
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "Amdahl's law"
+target "http://dl.acm.org/citation.cfm?doid=1465482.1465560"
+
+\end_inset
+
+ [Amdahl '67]
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Parallelizing a program with serial runtime 
+\begin_inset Formula $T\left(1\right)$
+\end_inset
+
+ with 
+\begin_inset Formula $N$
+\end_inset
+
+ processes and serial code fraction 
+\begin_inset Formula $f\in\left[0,1\right]$
+\end_inset
+
+ results in runtime:
+\begin_inset Formula 
+\[
+T\left(N\right)=T\left(1\right)\cdot\left(f+\frac{1}{N}\left(1-f\right)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+So for sufficiently large 
+\begin_inset Formula $N$
+\end_inset
+
+ runtime is dominated by serial code sections!
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/amdahl.pdf
+	width 100col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Amdahl's law
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Some general remarks
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Split up larger problems into smaller subproblems with appropriate size
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+If too small, performance degraded due to overhead
+\end_layout
+
+\begin_layout Itemize
+If too large, load balancing becomes problematic
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Many methods are not thread-safe
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Use 
+\family typewriter
+\series bold
+Lock.acquire()
+\family default
+\series default
+ and 
+\family typewriter
+\series bold
+Lock.release()
+\family default
+\series default
+ in critical code sections
+\end_layout
+
+\begin_layout Itemize
+Note: even 
+\family typewriter
+\series bold
+print
+\family default
+\series default
+ is not thread-safe
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Arguing about the correctness of a parallel program is hard
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Order of computations are not fixed
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Section
+Multiprocessing API
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+
+\size largest
+API of the 
+\family typewriter
+\series bold
+multiprocessing
+\family default
+\series default
+ module
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Subsection
+Worker pools
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Worker pools
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Simplest parallelization strategy is to use a worker pool
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Accessible via 
+\family typewriter
+\series bold
+multiprocessing.Pool
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Important methods:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\family typewriter
+\series bold
+map
+\family default
+\series default
+ (
+\family typewriter
+\series bold
+map_async
+\family default
+\series default
+) for (asynchronous) parallel map
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+\series bold
+apply_async
+\family default
+\series default
+ for asynchronous function evaluation
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Limitations:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Can only deal with pickable objects
+\end_layout
+
+\begin_layout Itemize
+Cannot use 
+\family typewriter
+\series bold
+lambda
+\family default
+\series default
+ expressions, nested functions, class methods
+\end_layout
+
+\begin_layout Itemize
+Can use global functions, global classes and partial functions via 
+\family typewriter
+\series bold
+functools.partial
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+\series bold
+Pool
+\family default
+\series default
+ will not work in interactive sessions
+\begin_inset Newline newline
+\end_inset
+
+(
+\family typewriter
+\series bold
+__main__
+\family default
+\series default
+ module has to be importable by the children)
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout FragileFrame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Parallel map
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+from multiprocessing import Pool
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def cube(num):
+\end_layout
+
+\begin_layout Plain Layout
+
+  return num**3
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if __name__ == '__main__':
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Can also specify 'processes' parameter
+\end_layout
+
+\begin_layout Plain Layout
+
+  p = Pool()
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Equivalent of serial map(cube, range(10))
+\end_layout
+
+\begin_layout Plain Layout
+
+  res = p.map(cube, range(10))
+\end_layout
+
+\begin_layout Plain Layout
+
+  print(res)
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Output: [0, 1, 8, 27, 64, 125, 216, 343, 512, 729]
+\end_layout
+
+\end_inset
+
+Note: This overly simplified example runs slower than the serial version
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout FragileFrame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Asynchronous function evaluation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+from multiprocessing import Pool
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def double(arg):
+\end_layout
+
+\begin_layout Plain Layout
+
+  return 2*arg
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def cube(num):
+\end_layout
+
+\begin_layout Plain Layout
+
+  return num**3
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if __name__ == '__main__':
+\end_layout
+
+\begin_layout Plain Layout
+
+  p = Pool()
+\end_layout
+
+\begin_layout Plain Layout
+
+  f1_get = p.apply_async(cube, args=(6,))
+\end_layout
+
+\begin_layout Plain Layout
+
+  f2_get = p.apply_async(double, args=('haha',))
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Do other work here
+\end_layout
+
+\begin_layout Plain Layout
+
+  res = [f1_get.get(), f2_get.get()]
+\end_layout
+
+\begin_layout Plain Layout
+
+  print(res)
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Output: [216, 'hahahaha']
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Subsection
+Sharing data
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+
+\size largest
+Sharing data
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout FragileFrame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Shared memory maps
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+To share state with a 
+\family typewriter
+\series bold
+Process
+\family default
+\series default
+ use shared memory maps:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+from multiprocessing import Process, Array
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def cube_arr(arr):
+\end_layout
+
+\begin_layout Plain Layout
+
+  for i in range(len(arr)):
+\end_layout
+
+\begin_layout Plain Layout
+
+    arr[i] = arr[i]**3
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if __name__ == '__main__':
+\end_layout
+
+\begin_layout Plain Layout
+
+  shared_arr = Array('i', range(10))  # 'd' for double
+\end_layout
+
+\begin_layout Plain Layout
+
+  p = Process(target=cube_arr, args=(shared_arr,))
+\end_layout
+
+\begin_layout Plain Layout
+
+  p.start()
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Do other work here
+\end_layout
+
+\begin_layout Plain Layout
+
+  p.join()
+\end_layout
+
+\begin_layout Plain Layout
+
+  print(shared_arr[:])  
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Output: [0, 1, 8, 27, 64, 125, 216, 343, 512, 729]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout FragileFrame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Server processes and managers
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Alternatively use a 
+\family typewriter
+\series bold
+Manager
+\family default
+\series default
+ for more complex objects:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+from multiprocessing import Process, Manager
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def modify_names(names):
+\end_layout
+
+\begin_layout Plain Layout
+
+  names['Alice'] = 42
+\end_layout
+
+\begin_layout Plain Layout
+
+  if 'Bob' in names:
+\end_layout
+
+\begin_layout Plain Layout
+
+    shared_dict['Bob'] += 1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if __name__ == '__main__':
+\end_layout
+
+\begin_layout Plain Layout
+
+  with Manager() as m:
+\end_layout
+
+\begin_layout Plain Layout
+
+    shared_dict = m.dict()
+\end_layout
+
+\begin_layout Plain Layout
+
+    shared_dict['Bob'] = 7
+\end_layout
+
+\begin_layout Plain Layout
+
+    p = Process(target=modify_names, args=(shared_dict,))
+\end_layout
+
+\begin_layout Plain Layout
+
+    p.start()
+\end_layout
+
+\begin_layout Plain Layout
+
+    # Do other work here
+\end_layout
+
+\begin_layout Plain Layout
+
+    p.join()
+\end_layout
+
+\begin_layout Plain Layout
+
+    print(shared_dict)  # Output: {'Bob': 8, 'Alice': 42}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Subsection
+Interprocess communication
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+
+\size largest
+Interprocess communication
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout FragileFrame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Pipes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+To communicate between two processes use a 
+\family typewriter
+\series bold
+Pipe
+\family default
+\series default
+:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+from multiprocessing import Process, Pipe
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def cube(my_pipe):
+\end_layout
+
+\begin_layout Plain Layout
+
+  data = my_pipe.recv()
+\end_layout
+
+\begin_layout Plain Layout
+
+  my_pipe.send([n**3 for n in data])
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if __name__ == '__main__':
+\end_layout
+
+\begin_layout Plain Layout
+
+  parent_pipe, child_pipe = Pipe()
+\end_layout
+
+\begin_layout Plain Layout
+
+  p = Process(target=cube, args=(child_pipe,))
+\end_layout
+
+\begin_layout Plain Layout
+
+  p.start()
+\end_layout
+
+\begin_layout Plain Layout
+
+  parent_pipe.send(range(10))  # Send work
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Do other work here
+\end_layout
+
+\begin_layout Plain Layout
+
+  print(parent_pipe.recv())
+\end_layout
+
+\begin_layout Plain Layout
+
+  p.join()
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Output: [0, 1, 8, 27, 64, 125, 216, 343, 512, 729]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout FragileFrame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Queues
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+For several processes can use a 
+\family typewriter
+\series bold
+Queue
+\family default
+\series default
+:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+from multiprocessing import Process, Queue
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def place_work(q):
+\end_layout
+
+\begin_layout Plain Layout
+
+  q.put(range(10))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def process_work(q):
+\end_layout
+
+\begin_layout Plain Layout
+
+  data = q.get()
+\end_layout
+
+\begin_layout Plain Layout
+
+  q.put([n**3 for n in data])
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if __name__ == '__main__':
+\end_layout
+
+\begin_layout Plain Layout
+
+  queue = Queue()
+\end_layout
+
+\begin_layout Plain Layout
+
+  p1 = Process(target=place_work, args=(queue,))
+\end_layout
+
+\begin_layout Plain Layout
+
+  p2 = Process(target=process_work, args=(queue,))
+\end_layout
+
+\begin_layout Plain Layout
+
+  p1.start(); p2.start()  # Now do other work
+\end_layout
+
+\begin_layout Plain Layout
+
+  p1.join(); p2.join()
+\end_layout
+
+\begin_layout Plain Layout
+
+  print(queue.get())  # Output: [1, 64, 343]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Subsection
+Guidelines
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Guidelines (I)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Most important: Only parallelize where necessary!
+\end_layout
+
+\begin_layout Itemize
+Try to avoid sharing state if possible
+\end_layout
+
+\begin_layout Itemize
+If need to share:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Use 
+\family typewriter
+\series bold
+Value
+\family default
+\series default
+ and 
+\family typewriter
+\series bold
+Array
+\family default
+\series default
+ for simple data
+\end_layout
+
+\begin_layout Itemize
+Use server process 
+\family typewriter
+\series bold
+Manager
+\family default
+\series default
+ for more complex objects
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+For interprocess communication use 
+\family typewriter
+\series bold
+Pipe
+\family default
+\series default
+ and 
+\family typewriter
+\series bold
+Queue
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Pipes for fast point-to-point communication
+\end_layout
+
+\begin_layout Itemize
+Queues are multi-producer, multi-consumer FIFO queues
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Guidelines (II)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Explicitly pass resources to subprocesses and avoid global variables as
+ they can lead to inconsistencies (Windows)
+\end_layout
+
+\begin_layout Itemize
+Ensure that the main module can be safely imported by a new Python instance
+ (Windows)
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Use 
+\family typewriter
+\series bold
+if __name__ == '__main__'
+\family default
+\series default
+ guard to avoid side effects
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Avoid 
+\family typewriter
+\series bold
+Process.terminate
+\family default
+\series default
+ as it might break access to shared resources
+\end_layout
+
+\begin_layout Itemize
+Read more on:
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+\series bold
+\size scriptsize
+
+\begin_inset CommandInset href
+LatexCommand href
+name "https://docs.python.org/2/library/multiprocessing.html#programming-guidelines"
+target "https://docs.python.org/2/library/multiprocessing.html#programming-guidelines"
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Subsection
+Demo
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+
+\size largest
+Time for a short demo!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Midpoint rule for numerical integration
+\begin_inset Formula 
+\[
+\intop_{a}^{b}f\left(x\right)\,\mathsf{d}x\approx h\sum_{k=1}^{N}f\left(a+\left(k-\frac{1}{2}\right)h\right),\qquad h=\frac{b-a}{N}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Allows for straightforward parallel evaluation
+\begin_inset Formula 
+\[
+\intop_{a}^{b}f\left(x\right)\,\mathsf{d}x=\intop_{a}^{c}f\left(x\right)\,\mathsf{d}x+\intop_{c}^{b}f\left(x\right)\,\mathsf{d}x,\qquad\forall c\in\mathbb{R}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Can split up large integration range into several small ones, which can
+ be evaluated in parallel
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Subsection
+Questions & Answers
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+
+\size largest
+Questions & Answers
+\begin_inset Newline newline
+\end_inset
+
+
+\size default
+(if time permits)
+\begin_inset VSpace bigskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size normal
+Slides on:
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+\series bold
+\size default
+
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+www.github.com/czielinski/pyconsg2015
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Separator
+
+\end_layout
+
+\end_body
+\end_document
