@@ -135,9 +135,9 @@ on Multicore Processors}
 \item Working in computational physics, i.e.~simulation of elementary particles
 with Monte Carlo methods (``\href{http://en.wikipedia.org/wiki/Lattice_QCD}{lattice quantum chromodynamics}'')
 \end{itemize}
-\item First experiments with Python around ten years ago
 \item Heavy user of Python, \texttt{\textbf{numpy}} and \texttt{\textbf{scipy}}
 for data analysis and evaluation of numerical algorithms
+\item First experiments with Python around ten years ago
 \item Slides available on:
 \end{itemize}
 
@@ -153,11 +153,7 @@ for data analysis and evaluation of numerical algorithms
 \begin{frame}{Why concurrency?}
 
 \begin{itemize}
-\item Python is \textit{awesome}, but slow
-
-\begin{itemize}
-\item C/C++ is typically 10--100 times faster
-\end{itemize}
+\item Python is \textit{awesome}, but slow (if you don't use C/C++ extensions)
 \item Single CPU core performance only improves slowly over time
 
 \begin{itemize}
@@ -204,7 +200,6 @@ have similar API
 \begin{frame}{Global Interpreter Lock (GIL)}
 
 \begin{itemize}
-\item CPython's threads are real POSIX / Windows threads
 \item The Global Interpreter Lock (GIL) prevents that more than one thread
 is executing Python bytecode at the same time
 \item The Global Interpreter Lock:
@@ -221,6 +216,7 @@ is executing Python bytecode at the same time
 \item CPython and PyPy have a GIL
 \item Jython and IronPython have no GIL
 \end{itemize}
+\item Read more on \texttt{\textbf{\footnotesize{}\href{https://wiki.python.org/moin/GlobalInterpreterLock}{https://wiki.python.org/moin/GlobalInterpreterLock}}}{\footnotesize \par}
 \end{itemize}
 \end{frame}
 
@@ -239,7 +235,8 @@ is executing Python bytecode at the same time
 \item Can be spawned quickly
 \item Share memory
 \end{itemize}
-\item Threads can be useful for I/O bound problems
+\item CPython's threads are real POSIX/Windows threads
+\item Threads can be useful for I/O heavy problems
 
 \begin{itemize}
 \item Do useful operations during blocking operations
@@ -251,7 +248,7 @@ is executing Python bytecode at the same time
 (with a few exceptions, e.g.~some \texttt{\textbf{numpy}} functions)
 \item Introduce additional overhead
 \end{itemize}
-\item Use \texttt{\textbf{Lock}} to define critical sections,\\
+\item Use a \texttt{\textbf{Lock}} to define critical sections,\\
 i.e.~code that requires mutual exclusion of access
 \end{itemize}
 \end{frame}
@@ -267,13 +264,12 @@ import threading as th
 def worker(lock, num):
   cubed = num**3
   # A worker should actually avoid I/O ...
-  lock.acquire()
-  print("{} cubed is {}".format(num, cubed))
-  lock.release()
+  with lock:
+    print("{} cubed is {}".format(num, cubed))
 
+lock = th.Lock()
 my_threads = []
 for i in range(4):
-  lock = th.Lock()
   t = th.Thread(target=worker, args=(lock, i))
   my_threads.append(t)
   t.start()
@@ -335,13 +331,12 @@ import multiprocessing as mp
 def worker(lock, num):
   cubed = num**3
   # A worker should actually avoid I/O ...
-  lock.acquire()
-  print("{} cubed is {}".format(num, cubed))
-  lock.release()
+  with lock:
+    print("{} cubed is {}".format(num, cubed))
 
+lock = mp.Lock()
 my_procs = []
 for i in range(4):
-  lock = mp.Lock()
   p = mp.Process(target=worker, args=(lock, i))
   my_procs.append(p)
   p.start()
@@ -368,14 +363,14 @@ code
 {[}Amdahl '67{]}
 
 \begin{itemize}
-\item Parallelizing a program with serial runtime $T\left(1\right)$ with
-$N$ processes and serial code fraction $f\in\left[0,1\right]$ results
-in runtime:
+\item Parallelizing a program with serial runtime $T_{1}$ using $N$ processes
+and a serial code fraction $f\in\left[0,1\right]$ (by runtime) results
+in a runtime of:
 \[
-T\left(N\right)=T\left(1\right)\cdot\left(f+\frac{1}{N}\left(1-f\right)\right)
+T_{N}=T_{1}\cdot\left(f+\frac{1}{N}\left(1-f\right)\right)
 \]
 
-\item So for sufficiently large $N$ runtime is dominated by serial code
+\item So for sufficiently large $N$, runtime is dominated by serial code
 sections!
 \end{itemize}
 \end{itemize}
@@ -404,13 +399,6 @@ size
 \begin{itemize}
 \item If too small, performance degraded due to overhead
 \item If too large, load balancing becomes problematic
-\end{itemize}
-\item Many methods are not thread-safe
-
-\begin{itemize}
-\item Use \texttt{\textbf{Lock.acquire()}} and \texttt{\textbf{Lock.release()}}
-in critical code sections
-\item Note: even \texttt{\textbf{print}} is not thread-safe
 \end{itemize}
 \item Arguing about the correctness of a parallel program is hard
 
@@ -590,7 +578,7 @@ if __name__ == '__main__':
 \begin{frame}[fragile]{Pipes}
 
 
-To communicate between two processes use a \texttt{\textbf{Pipe}}:\\
+To communicate between two processes we use a \texttt{\textbf{Pipe}}:\\
 \begin{lstlisting}
 from multiprocessing import Process, Pipe
 
@@ -615,7 +603,7 @@ if __name__ == '__main__':
 \begin{frame}[fragile]{Queues}
 
 
-For several processes can use a \texttt{\textbf{Queue}}:\\
+For several processes we can use a \texttt{\textbf{Queue}}:\\
 \begin{lstlisting}
 from multiprocessing import Process, Queue
 
@@ -630,9 +618,9 @@ if __name__ == '__main__':
   queue = Queue()
   p1 = Process(target=place_work, args=(queue,))
   p2 = Process(target=process_work, args=(queue,))
-  p1.start(); p2.start()  # Now do other work
-  p1.join(); p2.join()
-  print(queue.get())  # Output: [1, 64, 343]
+  p1.start(); p2.start(); p1.join(); p2.join()
+  print(queue.get())
+  # Output: [0, 1, 8, 27, 64, 125, 216, 343, 512, 729]
 \end{lstlisting}
 
 

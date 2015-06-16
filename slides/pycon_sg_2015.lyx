@@ -231,10 +231,6 @@ target "http://en.wikipedia.org/wiki/Lattice_QCD"
 
 \end_deeper
 \begin_layout Itemize
-First experiments with Python around ten years ago
-\end_layout
-
-\begin_layout Itemize
 Heavy user of Python, 
 \family typewriter
 \series bold
@@ -248,6 +244,10 @@ scipy
 \family default
 \series default
  for data analysis and evaluation of numerical algorithms
+\end_layout
+
+\begin_layout Itemize
+First experiments with Python around ten years ago
 \end_layout
 
 \begin_layout Itemize
@@ -299,15 +299,9 @@ Python is
 \shape italic
 awesome
 \shape default
-, but slow
+, but slow (if you don't use C/C++ extensions)
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-C/C++ is typically 10--100 times faster
-\end_layout
-
-\end_deeper
 \begin_layout Itemize
 Single CPU core performance only improves slowly over time
 \end_layout
@@ -457,10 +451,6 @@ Global Interpreter Lock (GIL)
 
 \begin_deeper
 \begin_layout Itemize
-CPython's threads are real POSIX / Windows threads
-\end_layout
-
-\begin_layout Itemize
 The Global Interpreter Lock (GIL) prevents that more than one thread is
  executing Python bytecode at the same time
 \end_layout
@@ -501,6 +491,22 @@ Jython and IronPython have no GIL
 \end_layout
 
 \end_deeper
+\begin_layout Itemize
+Read more on 
+\family typewriter
+\series bold
+\size footnotesize
+
+\begin_inset CommandInset href
+LatexCommand href
+name "https://wiki.python.org/moin/GlobalInterpreterLock"
+target "https://wiki.python.org/moin/GlobalInterpreterLock"
+
+\end_inset
+
+
+\end_layout
+
 \end_deeper
 \begin_layout Separator
 
@@ -549,7 +555,11 @@ Share memory
 
 \end_deeper
 \begin_layout Itemize
-Threads can be useful for I/O bound problems
+CPython's threads are real POSIX/Windows threads
+\end_layout
+
+\begin_layout Itemize
+Threads can be useful for I/O heavy problems
 \end_layout
 
 \begin_deeper
@@ -587,7 +597,7 @@ Introduce additional overhead
 
 \end_deeper
 \begin_layout Itemize
-Use 
+Use a 
 \family typewriter
 \series bold
 Lock
@@ -657,21 +667,21 @@ def worker(lock, num):
 
 \begin_layout Plain Layout
 
-  lock.acquire()
+  with lock:
 \end_layout
 
 \begin_layout Plain Layout
 
-  print("{} cubed is {}".format(num, cubed))
+    print("{} cubed is {}".format(num, cubed))
 \end_layout
 
 \begin_layout Plain Layout
 
-  lock.release()
 \end_layout
 
 \begin_layout Plain Layout
 
+lock = th.Lock()
 \end_layout
 
 \begin_layout Plain Layout
@@ -682,11 +692,6 @@ my_threads = []
 \begin_layout Plain Layout
 
 for i in range(4):
-\end_layout
-
-\begin_layout Plain Layout
-
-  lock = th.Lock()
 \end_layout
 
 \begin_layout Plain Layout
@@ -881,21 +886,21 @@ def worker(lock, num):
 
 \begin_layout Plain Layout
 
-  lock.acquire()
+  with lock:
 \end_layout
 
 \begin_layout Plain Layout
 
-  print("{} cubed is {}".format(num, cubed))
+    print("{} cubed is {}".format(num, cubed))
 \end_layout
 
 \begin_layout Plain Layout
 
-  lock.release()
 \end_layout
 
 \begin_layout Plain Layout
 
+lock = mp.Lock()
 \end_layout
 
 \begin_layout Plain Layout
@@ -906,11 +911,6 @@ my_procs = []
 \begin_layout Plain Layout
 
 for i in range(4):
-\end_layout
-
-\begin_layout Plain Layout
-
-  lock = mp.Lock()
 \end_layout
 
 \begin_layout Plain Layout
@@ -999,21 +999,21 @@ target "http://dl.acm.org/citation.cfm?doid=1465482.1465560"
 \begin_deeper
 \begin_layout Itemize
 Parallelizing a program with serial runtime 
-\begin_inset Formula $T\left(1\right)$
+\begin_inset Formula $T_{1}$
 \end_inset
 
- with 
+ using 
 \begin_inset Formula $N$
 \end_inset
 
- processes and serial code fraction 
+ processes and a serial code fraction 
 \begin_inset Formula $f\in\left[0,1\right]$
 \end_inset
 
- results in runtime:
+ (by runtime) results in a runtime of:
 \begin_inset Formula 
 \[
-T\left(N\right)=T\left(1\right)\cdot\left(f+\frac{1}{N}\left(1-f\right)\right)
+T_{N}=T_{1}\cdot\left(f+\frac{1}{N}\left(1-f\right)\right)
 \]
 
 \end_inset
@@ -1026,7 +1026,7 @@ So for sufficiently large
 \begin_inset Formula $N$
 \end_inset
 
- runtime is dominated by serial code sections!
+, runtime is dominated by serial code sections!
 \end_layout
 
 \end_deeper
@@ -1104,38 +1104,6 @@ If too small, performance degraded due to overhead
 
 \begin_layout Itemize
 If too large, load balancing becomes problematic
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
-Many methods are not thread-safe
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-Use 
-\family typewriter
-\series bold
-Lock.acquire()
-\family default
-\series default
- and 
-\family typewriter
-\series bold
-Lock.release()
-\family default
-\series default
- in critical code sections
-\end_layout
-
-\begin_layout Itemize
-Note: even 
-\family typewriter
-\series bold
-print
-\family default
-\series default
- is not thread-safe
 \end_layout
 
 \end_deeper
@@ -1772,7 +1740,7 @@ Pipes
 
 \begin_deeper
 \begin_layout Standard
-To communicate between two processes use a 
+To communicate between two processes we use a 
 \family typewriter
 \series bold
 Pipe
@@ -1885,7 +1853,7 @@ Queues
 
 \begin_deeper
 \begin_layout Standard
-For several processes can use a 
+For several processes we can use a 
 \family typewriter
 \series bold
 Queue
@@ -1964,17 +1932,17 @@ if __name__ == '__main__':
 
 \begin_layout Plain Layout
 
-  p1.start(); p2.start()  # Now do other work
+  p1.start(); p2.start(); p1.join(); p2.join()
 \end_layout
 
 \begin_layout Plain Layout
 
-  p1.join(); p2.join()
+  print(queue.get())
 \end_layout
 
 \begin_layout Plain Layout
 
-  print(queue.get())  # Output: [1, 64, 343]
+  # Output: [0, 1, 8, 27, 64, 125, 216, 343, 512, 729]
 \end_layout
 
 \end_inset

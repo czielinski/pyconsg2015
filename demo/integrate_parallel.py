@@ -40,7 +40,8 @@ def main():
         try:
             num_proc = int(sys.argv[1])
         except ValueError:
-            pass
+            print("Error: Could not parse argument")
+            sys.exit(1)
 
     # Starting subprocesses
     pool = mp.Pool(num_proc)
