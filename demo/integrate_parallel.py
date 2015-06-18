@@ -17,7 +17,7 @@ def integrate(I, N, f):
     """
     a, b = I
     h = float(b - a)/N   # Step size
-    mid_points = [a + h/2 + i*h for i in range(N)]
+    mid_points = (a + h/2 + i*h for i in xrange(N))
 
     int_sum = 0.0
     for p in mid_points:
