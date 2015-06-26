@@ -1049,7 +1049,7 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename images/amdahl.pdf
+	filename figures/amdahl.pdf
 	width 100col%
 
 \end_inset
