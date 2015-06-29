@@ -10,5 +10,3 @@ When trying to improve the performance of a Python application on a multicore ma
 
 In many cases, the _multiprocessing_ package allows to gain a significant speed-up by parallelization of computationally intensive code sections. We will cover the most important functionality of this module such as parallel mapping, asynchronous function evaluations, shared memory maps and interprocess communication. In particular, a parallel map can be often used as a drop-in alternative for a sequential mapping. We will go through some examples and discuss common pitfalls.
 
-**This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/.**
-
