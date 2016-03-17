@@ -1,6 +1,6 @@
 ## Concurrent Computations on Multicore Processors
 
-Slides from the talk _Concurrent Computations on Multicore Processors_ given at [PyCon SG 2015](https://pycon.sg/) on June 18, 2015 in Singapore (see the announcement of the talk [here](https://pycon.sg/schedule/presentation/54/)). A recording of the talk can be found [here](https://www.youtube.com/watch?v=XWm02dbaJTY).
+Slides from the talk _Concurrent Computations on Multicore Processors_ given at [PyCon SG 2015](https://pycon.sg/static/archive/2015/) on June 18, 2015 in Singapore (see the announcement of the talk [here](https://pycon.sg/static/archive/2015/schedule/presentation/54/index.html)). A recording of the talk can be found [here](https://www.youtube.com/watch?v=XWm02dbaJTY).
 
 ### Description
 In this talk we will discuss the _multiprocessing_ module, which allows parallel programming on multicore processors. We will do a quick comparison with the _threading_ module, cover the core API and finally discuss common pitfalls.
